@@ -1,6 +1,8 @@
 package Classes;
 
 import Helper.Color;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
@@ -13,6 +15,7 @@ public abstract class Player {
     this.name=name;
     this.color=color;
     consecutiveSixes=0;
+//    this.pieces=new ArrayList<>();
     }
 
     public List<Position> getPiecesPositions() {
@@ -53,4 +56,11 @@ public abstract class Player {
         this.color = color;
     }
 
+    public List<Piece> getPieces() {
+        return pieces;
+    }
+
+    public void setPieces(List<Piece> pieces) {
+        this.pieces = pieces;
+    }
 }

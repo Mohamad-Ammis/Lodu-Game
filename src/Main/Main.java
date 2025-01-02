@@ -11,10 +11,10 @@ import java.util.List;
 
 public class Main {
     public static void main(String[]args){
-        Player player1=new HumanPlayer("ammis111", Color.RED);
-        Player player2=new HumanPlayer("ammis222", Color.BLUE);
-        Player player3=new HumanPlayer("ammis333", Color.YELLOW);
-        Player player4=new HumanPlayer("ammis444", Color.GREEN);
+        Player player1=new HumanPlayer("Mohamad", Color.RED);
+        Player player2=new HumanPlayer("Ali", Color.BLUE);
+        Player player3=new HumanPlayer("Fouad", Color.YELLOW);
+        Player player4=new HumanPlayer("adnan", Color.GREEN);
         List<Player> playerList=new ArrayList<>();
         playerList.add(player1);
         playerList.add(player2);
