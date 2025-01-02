@@ -10,12 +10,15 @@ public abstract class Player {
     private Color color;
     private List<Piece> pieces;
     private int consecutiveSixes;
+    private Position startPosition;
+    private Position endPosition;
 
-    public Player(String name, Color color) {
+    public Player(String name, Color color, Position startPosition, Position endPosition) {
     this.name=name;
     this.color=color;
+    this.startPosition=startPosition;
+    this.endPosition=endPosition;
     consecutiveSixes=0;
-//    this.pieces=new ArrayList<>();
     }
 
     public List<Position> getPiecesPositions() {
@@ -63,4 +66,12 @@ public abstract class Player {
     public void setPieces(List<Piece> pieces) {
         this.pieces = pieces;
     }
+    public Position getStartPosition() {
+        return startPosition;
+    }
+
+    public Position getEndPosition() {
+        return endPosition;
+    }
+
 }
