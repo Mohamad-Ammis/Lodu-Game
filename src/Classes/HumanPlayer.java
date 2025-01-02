@@ -4,8 +4,8 @@ import Helper.Color;
 
 public class HumanPlayer extends Player {
 
-    public HumanPlayer(String name, Color color) {
-        super(name, color);
+    public HumanPlayer(String name, Color color, Position startPosition, Position endPosition) {
+        super(name, color,startPosition,endPosition);
     }
 
     @Override
