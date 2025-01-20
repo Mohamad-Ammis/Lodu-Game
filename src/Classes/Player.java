@@ -26,6 +26,7 @@ public abstract class Player {
     }
 
     public void resetConsecutiveSixes() {
+        this.consecutiveSixes=0;
     }
 
     public void incrementConsecutiveSixes() {
@@ -36,8 +37,7 @@ public abstract class Player {
         return this.consecutiveSixes<3;
     }
 
-    public void makeMove(int diceRoll, Board board) {
-    }
+    public abstract void makeMove(int diceRoll, Board board) ;
 
     public boolean allPiecesInHome(Board board) {
         return false;

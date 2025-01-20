@@ -43,6 +43,7 @@ public class Game {
     private void handleDiceRoll(Player currentPlayer) {
         int diceRoll = rollDice();
         currentPlayer.makeMove(diceRoll, board);
+        handleConsecutiveSixes(currentPlayer,diceRoll);
         while (diceRoll == 6) {
             currentPlayer.incrementConsecutiveSixes();
             if (currentPlayer.canPlayAgain()) {
@@ -51,12 +52,17 @@ public class Game {
                 input.nextLine();
                 diceRoll = rollDice();
                 currentPlayer.makeMove(diceRoll, board);
+                handleConsecutiveSixes(currentPlayer,diceRoll);
             } else {
                 break;
             }
         }
     }
-
+    public void handleConsecutiveSixes(Player player,int diceRoll){
+        if(diceRoll!=6){
+            player.resetConsecutiveSixes();
+        }
+    }
 
     public int rollDice() {
         int diceRoll = (int) (Math.random() * 6) + 1;
