@@ -36,30 +36,21 @@ public class Board {
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (piece.isStart() && steps != 6) {
-            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
-            return;
-        }
-        if(piece.isHome()){
-            System.out.println("Piece cannot be moved from the home.");
-            return;
-        }
+        if (!canPieceMove(piece, steps)) return;
+
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
         //we need this three index variable to check if piece is in player home path
         int currentIndex = currentPosition.getIndex();
         int playerEndIndex = owner.getEndPosition().getIndex();
-        int homeStartIndex = playerEndIndex - 4; // Start of home path (last 5 positions)
+        int homeStartIndex = playerEndIndex - 5; // Start of home path (last 5 positions)
         //target index where we will put the piece
         int targetIndex = currentIndex + steps;
-        //when this condition true so we are on path home so exactly one number is only accepted to play
-        if (currentIndex >= homeStartIndex && currentIndex <= playerEndIndex) {
-            //handle steps number if it's the exactly  number is only accepted to reach home
+        if (isInHomePath(currentIndex, homeStartIndex, playerEndIndex)) {
             handleHomeMovement(piece, steps, currentIndex, playerEndIndex);
             return;
         }
-        if (targetIndex > playerEndIndex) {
-            System.out.println("Target position exceeds player's end position. Move is not possible.");
+        if (isMoveExceedsEndPosition (targetIndex, playerEndIndex)) {
             return;
         }
         //when piece it's not on home path so we handle normal move state
@@ -67,46 +58,103 @@ public class Board {
         handleTargetPosition(piece, currentPosition, targetPosition);
     }
 
+
     private void handleHomeMovement(Piece piece, int steps, int currentIndex, int playerEndIndex) {
         int distanceToHome = playerEndIndex - currentIndex;
         if (steps == distanceToHome) {
-            System.out.println("Piece has reached home!");
-            piece.setInHome(true);
-            piece.getPosition().removePiece(piece);
-        } else if (steps > distanceToHome) {
-            System.out.println("Invalid move: Step count exceeds distance to home.");
+            movePieceToHome(piece);
+        } else if (steps < distanceToHome) {
+           movePieceWithinHomePath(piece,currentIndex,steps);
         } else {
-            int targetIndex=currentIndex+steps;
-            Position targetPosition=getPositionAt(targetIndex);
-            Position currentPosition=getPositionAt(currentIndex);
-            handleTargetPosition(piece,currentPosition,targetPosition);
+            System.out.println("Invalid move: Step count exceeds distance to home.");
+        }
+    }
+    private void movePieceToHome(Piece piece) {
+        System.out.println("Piece has reached home!");
+        piece.setInHome(true);
+        piece.getPosition().removePiece(piece);
+    }
+
+    private void movePieceWithinHomePath(Piece piece, int currentIndex, int steps) {
+        int targetIndex = currentIndex + steps;
+        Position targetPosition = getPositionAt(targetIndex);
+        Position currentPosition = getPositionAt(currentIndex);
+        handleTargetPosition(piece, currentPosition, targetPosition);
+    }
+
+
+    private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
+        //handle opponentPiece existed state
+        if (isBlockedBySinglePiece(targetPosition,piece)) {
+            handleOpponentPiece(targetPosition,piece);
+            return;
+        }if (isBlockedByMultiplePieces(targetPosition,piece)) {
+            System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
+            return;
+        }
+        //normal state
+        updatePiecePosition(piece, currentPosition, targetPosition);
+    }
+    private int blockedOpponentPiecesCount(Position targetPosition, Piece piece) {
+        int count=0;
+        if (!targetPosition.isSafe() && !targetPosition.getPieces().isEmpty()) {
+            for (Piece opponentPiece : targetPosition.getPieces()) {
+                if (piece.isOpponentPiece(opponentPiece)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    public boolean isBlockedBySinglePiece(Position targetPosition, Piece piece){
+        return blockedOpponentPiecesCount(targetPosition, piece)==1;
+    }
+    public boolean isBlockedByMultiplePieces(Position targetPosition, Piece piece){
+        return blockedOpponentPiecesCount(targetPosition, piece)>=2;
+    }
+
+    private void handleOpponentPiece(Position targetPosition,Piece piece) {
+            //first get piece,get owner start position to reset it ,remove piece from current position,then reset it to start
+            Piece opponentPiece = targetPosition.getPieces().get(0);
+        if (piece.isOpponentPiece(opponentPiece)) {
+            Position opponentStart = opponentPiece.getOwner().getStartPosition();
+            Position opponentPiecePosition=opponentPiece.getPosition();
+            opponentPiecePosition.removePiece(opponentPiece);
+            opponentPiece.resetToStart(opponentStart);
+            System.out.println("Opponent piece reset to start position.");
         }
     }
 
-    private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
-        //handle opponentPiece existed state, when the condition true so there is opponentPiece in position
-        if (!targetPosition.isSafe() && !targetPosition.getPieces().isEmpty()) {
-            //check if pieces is only one , if its one reset it to home , else it will be as wall
-            if (targetPosition.getPieces().size() == 1) {
-                //get piece
-                Piece opponentPiece = targetPosition.getPieces().get(0);
-                //get player start position index
-                Position opponentStart = opponentPiece.getOwner().getStartPosition();
-                //reset to start
-                opponentStart.addPiece(opponentPiece);
-                opponentPiece.resetToStart(opponentStart);
-            } else {
-                System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
-                return;
-            }
+    private boolean canPieceMove(Piece piece, int steps) {
+        if (piece.isStart() && steps != 6) {
+            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
+            return false;
         }
+        if (piece.isHome()) {
+            System.out.println("Piece cannot be moved from the home.");
+            return false;
+        }
+        return true;
+    }
+
+    private void updatePiecePosition(Piece piece, Position currentPosition, Position targetPosition) {
         currentPosition.removePiece(piece);
         targetPosition.addPiece(piece);
         piece.setPosition(targetPosition);
         piece.setInPlay(true);
-
     }
 
+    private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {
+        return currentIndex >= homeStartIndex && currentIndex <= playerEndIndex;
+    }
+
+    private boolean isMoveExceedsEndPosition (int targetIndex, int playerEndIndex) {
+        if (targetIndex > playerEndIndex) {
+            System.out.println("Target position exceeds player's end position. Move is not possible.");
+            return true;
+        }
+        return false;
+    }
     public List<Piece> getPiecesAtPosition(int index) {
         return positions.get(index).getPieces();
     }

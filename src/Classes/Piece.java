@@ -61,11 +61,15 @@ public class Piece {
     public boolean isHome() {
         return this.isHome;
     }
+    boolean isOpponentPiece(Piece opponentPiece) {
+        return !opponentPiece.getOwner().equals(this.getOwner());
+    }
     public void resetToStart(Position startPosition) {
         this.currentPosition = startPosition;
         this.isStart = true;
         this.inPlay = false;
         this.isHome=false;
+        startPosition.addPiece(this);
         System.out.println("Piece has been reset to the start position.");
     }
 
