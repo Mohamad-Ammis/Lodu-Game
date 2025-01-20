@@ -68,7 +68,10 @@ public class Board {
         } else if (steps > distanceToHome) {
             System.out.println("Invalid move: Step count exceeds distance to home.");
         } else {
-            System.out.println("Invalid move: You need exactly " + distanceToHome + " steps to reach home.");
+            int targetIndex=currentIndex+steps;
+            Position targetPosition=getPositionAt(targetIndex);
+            Position currentPosition=getPositionAt(currentIndex);
+            handleTargetPosition(piece,currentPosition,targetPosition);
         }
     }
 
