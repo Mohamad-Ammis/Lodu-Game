@@ -8,7 +8,8 @@ public class ComputerPlayer extends Player {
         super(name, color,startPosition,endPosition);
     }
     @Override
-    public void makeMove(int diceRoll, Board board) {
+    public boolean makeMove(int diceRoll, Board board) {
+        return false;
     }
 
     public int decideBestMove(int diceRoll, Board board) {

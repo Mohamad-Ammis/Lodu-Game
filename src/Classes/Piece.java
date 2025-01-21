@@ -88,7 +88,7 @@ public class Piece {
         this.setPosition(targetPosition);
         this.setInPlay(true);
     }
-     void handleOpponentPiece(Position targetPosition) {
+     boolean handleOpponentPiece(Position targetPosition) {
         //first get piece,get owner start position to reset it ,remove piece from current position,then reset it to start
         Piece opponentPiece = targetPosition.getPieces().get(0);
         if (this.isOpponentPiece(opponentPiece)) {
@@ -97,7 +97,9 @@ public class Piece {
             opponentPiecePosition.removePiece(opponentPiece);
             opponentPiece.resetToStart(opponentStart);
             System.out.println("Opponent piece reset to start position.");
+            return true;
         }
+        return false;
     }
 
 

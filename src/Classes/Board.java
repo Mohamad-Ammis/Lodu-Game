@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    private final  int SIZE=60;
+    private final int  SIZE=60;
     private List<Position> positions;
 
     public Board() {
@@ -29,13 +29,13 @@ public class Board {
         return  positions.get(index);
     }
 
-    public void movePiece(Piece piece, int steps) {
+    public boolean movePiece(Piece piece, int steps) {
         Position currentPosition = piece.getPosition();
 
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (!piece.canMove( steps,this)) return;
+        if (!piece.canMove( steps,this)) return false;
 
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
@@ -47,14 +47,15 @@ public class Board {
         int targetIndex = currentIndex + steps;
         if (isInHomePath(currentIndex, homeStartIndex, playerEndIndex)) {
             handleHomeMovement(piece, steps, currentIndex, playerEndIndex);
-            return;
+            return false;
         }
         if (isMoveExceedsEndPosition (targetIndex, playerEndIndex)) {
-            return;
+            return false;
         }
         //when piece it's not on home path so we handle normal move state
         Position targetPosition = getPositionAt(targetIndex);
-        handleTargetPosition(piece, currentPosition, targetPosition);
+        boolean extraTurn= handleTargetPosition(piece, currentPosition, targetPosition);
+        return extraTurn;
     }
 
 
@@ -82,17 +83,18 @@ public class Board {
     }
 
 
-    private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
+    private boolean handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
         //handle opponentPiece existed state
         if (targetPosition.isBlockedBySinglePiece(piece)) {
-            piece.handleOpponentPiece(targetPosition);
-            return;
+           return piece.handleOpponentPiece(targetPosition);
+
         }if (targetPosition.isBlockedByMultiplePieces(piece)) {
             System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
-            return;
+            return false;
         }
         //normal state
         piece.updatePosition(currentPosition, targetPosition);
+        return false;
     }
 
     private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {
