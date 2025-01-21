@@ -18,8 +18,6 @@ public class Piece {
     this.isStart=true;
     }
 
-
-
     public Position getPosition() {
         return this.currentPosition;
     }
@@ -28,7 +26,7 @@ public class Piece {
     }
 
     public boolean isAtHome(Board board) {
-        return false;
+        return this.isHome;
     }
 
     boolean canMove(int steps, Board board) {
@@ -84,5 +82,23 @@ public class Piece {
         startPosition.addPiece(this);
         System.out.println("Piece has been reset to the start position.");
     }
+    void updatePosition(Position currentPosition, Position targetPosition) {
+        currentPosition.removePiece(this);
+        targetPosition.addPiece(this);
+        this.setPosition(targetPosition);
+        this.setInPlay(true);
+    }
+     void handleOpponentPiece(Position targetPosition) {
+        //first get piece,get owner start position to reset it ,remove piece from current position,then reset it to start
+        Piece opponentPiece = targetPosition.getPieces().get(0);
+        if (this.isOpponentPiece(opponentPiece)) {
+            Position opponentStart = opponentPiece.getOwner().getStartPosition();
+            Position opponentPiecePosition=opponentPiece.getPosition();
+            opponentPiecePosition.removePiece(opponentPiece);
+            opponentPiece.resetToStart(opponentStart);
+            System.out.println("Opponent piece reset to start position.");
+        }
+    }
+
 
 }

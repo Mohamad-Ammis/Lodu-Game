@@ -28,8 +28,6 @@ public class Board {
         return  positions.get(index);
     }
 
-
-
     public void movePiece(Piece piece, int steps) {
         Position currentPosition = piece.getPosition();
 
@@ -86,14 +84,14 @@ public class Board {
     private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
         //handle opponentPiece existed state
         if (isBlockedBySinglePiece(targetPosition,piece)) {
-            handleOpponentPiece(targetPosition,piece);
+            piece.handleOpponentPiece(targetPosition);
             return;
         }if (isBlockedByMultiplePieces(targetPosition,piece)) {
             System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
             return;
         }
         //normal state
-        updatePiecePosition(piece, currentPosition, targetPosition);
+        piece.updatePosition(currentPosition, targetPosition);
     }
     private int blockedOpponentPiecesCount(Position targetPosition, Piece piece) {
         int count=0;
@@ -111,27 +109,6 @@ public class Board {
     }
     public boolean isBlockedByMultiplePieces(Position targetPosition, Piece piece){
         return blockedOpponentPiecesCount(targetPosition, piece)>=2;
-    }
-
-    private void handleOpponentPiece(Position targetPosition,Piece piece) {
-            //first get piece,get owner start position to reset it ,remove piece from current position,then reset it to start
-            Piece opponentPiece = targetPosition.getPieces().get(0);
-        if (piece.isOpponentPiece(opponentPiece)) {
-            Position opponentStart = opponentPiece.getOwner().getStartPosition();
-            Position opponentPiecePosition=opponentPiece.getPosition();
-            opponentPiecePosition.removePiece(opponentPiece);
-            opponentPiece.resetToStart(opponentStart);
-            System.out.println("Opponent piece reset to start position.");
-        }
-    }
-
-
-
-    private void updatePiecePosition(Piece piece, Position currentPosition, Position targetPosition) {
-        currentPosition.removePiece(piece);
-        targetPosition.addPiece(piece);
-        piece.setPosition(targetPosition);
-        piece.setInPlay(true);
     }
 
     private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {
