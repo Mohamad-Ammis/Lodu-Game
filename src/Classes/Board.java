@@ -33,7 +33,7 @@ public class Board {
     public Piece getFirstPieceAt(Player player, int index){
         Position position = getPositionAt(index);
         for (Piece piece : position.getPieces()){
-            if (piece.getOwner().color == player.color){
+            if (piece.getOwner().getColor() == player.getColor()){
                 return piece;
             }
         }
