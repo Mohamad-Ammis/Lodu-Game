@@ -9,7 +9,8 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public void makeMove(int diceRoll, Game game) {
+    public boolean makeMove(int diceRoll, Board board) {
+        return false;
     }
     @Override
     public Player copy(){

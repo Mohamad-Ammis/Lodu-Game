@@ -46,17 +46,19 @@ public class Game {
     }
 
     private void handleDiceRoll(Player currentPlayer) {
+        //variable to check extra turn when player eat opponent piece
+        boolean extraTurn=false;
         int diceRoll = rollDice();
-        currentPlayer.makeMove(diceRoll, this);
+       extraTurn= currentPlayer.makeMove(diceRoll, this);
         handleConsecutiveSixes(currentPlayer,diceRoll);
-        while (diceRoll == 6) {
+        while (diceRoll ==6||extraTurn) {
             currentPlayer.incrementConsecutiveSixes();
             if (currentPlayer.canPlayAgain()) {
                 System.out.println("Congratulations " + currentPlayer.getName() + " gets another turn!");
                 System.out.println("Press any button to roll dice ");
                 input.nextLine();
                 diceRoll = rollDice();
-                currentPlayer.makeMove(diceRoll, this);
+               extraTurn= currentPlayer.makeMove(diceRoll, this);
                 handleConsecutiveSixes(currentPlayer,diceRoll);
             } else {
                 break;

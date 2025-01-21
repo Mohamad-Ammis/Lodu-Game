@@ -17,6 +17,7 @@ public class Main {
        playerList.add(player2);
 //        playerList.add(player3);
 //        playerList.add(player4);
+
         Game game=new Game(new Board(),playerList
         );
         List<Game> games = game.getNextStates(6, player1);

@@ -40,13 +40,13 @@ public class Board {
         return null;
     }
 
-    public void movePiece(Piece piece, int steps) {
+    public boolean movePiece(Piece piece, int steps) {
         Position currentPosition = piece.getPosition();
 
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (!canPieceMove(piece, steps)) return;
+        if (!piece.canMove( steps,this)) return false;
 
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
@@ -58,14 +58,15 @@ public class Board {
         int targetIndex = currentIndex + steps;
         if (isInHomePath(currentIndex, homeStartIndex, playerEndIndex)) {
             handleHomeMovement(piece, steps, currentIndex, playerEndIndex);
-            return;
+            return false;
         }
         if (isMoveExceedsEndPosition (targetIndex, playerEndIndex)) {
-            return;
+            return false;
         }
         //when piece it's not on home path so we handle normal move state
         Position targetPosition = getPositionAt(targetIndex);
-        handleTargetPosition(piece, currentPosition, targetPosition);
+        boolean extraTurn= handleTargetPosition(piece, currentPosition, targetPosition);
+        return extraTurn;
     }
 
 
@@ -93,65 +94,18 @@ public class Board {
     }
 
 
-    private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
+    private boolean handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
         //handle opponentPiece existed state
-        if (isBlockedBySinglePiece(targetPosition,piece)) {
-            handleOpponentPiece(targetPosition,piece);
-            return;
-        }if (isBlockedByMultiplePieces(targetPosition,piece)) {
+        if (targetPosition.isBlockedBySinglePiece(piece)) {
+           return piece.handleOpponentPiece(targetPosition);
+
+        }if (targetPosition.isBlockedByMultiplePieces(piece)) {
             System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
-            return;
+            return false;
         }
         //normal state
-        updatePiecePosition(piece, currentPosition, targetPosition);
-    }
-    private int blockedOpponentPiecesCount(Position targetPosition, Piece piece) {
-        int count=0;
-        if (!targetPosition.isSafe() && !targetPosition.getPieces().isEmpty()) {
-            for (Piece opponentPiece : targetPosition.getPieces()) {
-                if (piece.isOpponentPiece(opponentPiece)) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    public boolean isBlockedBySinglePiece(Position targetPosition, Piece piece){
-        return blockedOpponentPiecesCount(targetPosition, piece)==1;
-    }
-    public boolean isBlockedByMultiplePieces(Position targetPosition, Piece piece){
-        return blockedOpponentPiecesCount(targetPosition, piece)>=2;
-    }
-
-    private void handleOpponentPiece(Position targetPosition,Piece piece) {
-            //first get piece,get owner start position to reset it ,remove piece from current position,then reset it to start
-            Piece opponentPiece = targetPosition.getPieces().get(0);
-        if (piece.isOpponentPiece(opponentPiece)) {
-            Position opponentStart = opponentPiece.getOwner().getStartPosition();
-            Position opponentPiecePosition=opponentPiece.getPosition();
-            opponentPiecePosition.removePiece(opponentPiece);
-            opponentPiece.resetToStart(opponentStart);
-            System.out.println("Opponent piece reset to start position.");
-        }
-    }
-
-    public boolean canPieceMove(Piece piece, int steps) {
-        if (piece.isStart() && steps != 6) {
-            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
-            return false;
-        }
-        if (piece.isHome()) {
-            System.out.println("Piece cannot be moved from the home.");
-            return false;
-        }
-        return true;
-    }
-
-    private void updatePiecePosition(Piece piece, Position currentPosition, Position targetPosition) {
-        currentPosition.removePiece(piece);
-        targetPosition.addPiece(piece);
-        piece.setPosition(targetPosition);
-        piece.setInPlay(true);
+        piece.updatePosition(currentPosition, targetPosition);
+        return false;
     }
 
     private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {

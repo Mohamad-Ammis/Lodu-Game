@@ -32,7 +32,7 @@ public abstract class Player {
         return this.consecutiveSixes<3;
     }
 
-    public abstract void makeMove(int diceRoll, Game game) ;
+    public abstract boolean makeMove(int diceRoll, Board board) ;
 
     public boolean allPiecesInHome(Board board) {
         return false;
