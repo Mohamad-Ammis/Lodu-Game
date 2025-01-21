@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class Player {
     private String name;
     private Color color;
-    private List<Piece> pieces;
+    private Piece[] pieces;
     private int consecutiveSixes;
     private Position startPosition;
     private Position endPosition;
@@ -18,6 +18,11 @@ public abstract class Player {
     this.color=color;
     this.startPosition=startPosition;
     this.endPosition=endPosition;
+    this.pieces=new Piece[4] ;
+        for (int i = 0; i < 4; i++) {
+            pieces[i]=new Piece();
+            pieces[i].setPosition(startPosition);
+        }
     consecutiveSixes=0;
     }
 
@@ -59,12 +64,12 @@ public abstract class Player {
         this.color = color;
     }
 
-    public List<Piece> getPieces() {
-        return pieces;
+    public Piece[] getPieces() {
+    return pieces;
     }
 
     public void setPieces(List<Piece> pieces) {
-        this.pieces = pieces;
+
     }
     public Position getStartPosition() {
         return startPosition;

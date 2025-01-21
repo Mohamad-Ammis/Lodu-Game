@@ -9,7 +9,9 @@ public class Piece {
     private boolean inPlay;
     private boolean isHome;
     private boolean isStart;
+    public Piece(){
 
+    }
     public Piece(Color color,Player owner) {
     this.color=color;
     this.owner=owner;
