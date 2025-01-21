@@ -36,7 +36,7 @@ public class Board {
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (!canPieceMove(piece, steps)) return;
+        if (!piece.canMove( steps,this)) return;
 
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
@@ -125,17 +125,7 @@ public class Board {
         }
     }
 
-    private boolean canPieceMove(Piece piece, int steps) {
-        if (piece.isStart() && steps != 6) {
-            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
-            return false;
-        }
-        if (piece.isHome()) {
-            System.out.println("Piece cannot be moved from the home.");
-            return false;
-        }
-        return true;
-    }
+
 
     private void updatePiecePosition(Piece piece, Position currentPosition, Position targetPosition) {
         currentPosition.removePiece(piece);

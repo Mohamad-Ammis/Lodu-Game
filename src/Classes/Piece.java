@@ -21,7 +21,7 @@ public class Piece {
 
 
     public Position getPosition() {
-        return null;
+        return this.currentPosition;
     }
 
     public void move(int diceRoll, Board board) {
@@ -31,28 +31,40 @@ public class Piece {
         return false;
     }
 
-    public boolean canMove(int diceRoll, Board board) {
-        return false;
+    boolean canMove(int steps, Board board) {
+        if (this.isStart() && steps != 6) {
+            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
+            return false;
+        }
+        if (this.isHome()) {
+            System.out.println("Piece cannot be moved from the home.");
+            return false;
+        }
+        return true;
     }
 
     public void setInPlay(boolean inPlay) {
+        this.inPlay=inPlay;
     }
 
     public void setStart(boolean isStart) {
+    this.isStart=isStart;
+
     }
 
     public void setPosition(Position position) {
+    this.currentPosition=position;
     }
 
     public Color getColor() {
-        return null;
+        return this.color;
     }
 
     public boolean isStart() {
-        return false;
+        return this.isStart;
     }
     public Player getOwner() {
-        return owner;
+        return this.owner;
     }
     public void setInHome(boolean isHome) {
         this.isHome = isHome;
