@@ -9,7 +9,13 @@ public class HumanPlayer extends Player {
     }
 
     @Override
-    public boolean makeMove(int diceRoll, Board board) {
+    public boolean makeMove(int diceRoll, Game game) {
         return false;
+    }
+    @Override
+    public Player copy(){
+        HumanPlayer player = new HumanPlayer(this.name, this.color, this.startPosition, this.endPosition);
+        player.consecutiveSixes = this.consecutiveSixes;
+        return player;
     }
 }

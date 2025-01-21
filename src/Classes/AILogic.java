@@ -23,6 +23,7 @@ public class AILogic {
         if (game.isGameOver() || depth >= maxDepth)
             return evaluateState(game, maximizePlayer);
 
+
         return  0;
     }
 

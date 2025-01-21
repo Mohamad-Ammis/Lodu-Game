@@ -30,8 +30,8 @@ public class Position {
     this.pieces.remove(piece);
     }
 
-    public boolean isEmpty() {
-        return this.pieces.isEmpty();
+    public boolean isOccupied() {
+        return false;
     }
 
     public List<Piece> getPieces() {
@@ -48,6 +48,10 @@ public class Position {
         }
         return count;
     }
+
+    public Position copy(){
+        return new Position(this.index, this.isSafe);
+    }
      public boolean isBlockedBySinglePiece(Piece piece){
         return this.blockedOpponentPiecesCount(piece)==1;
     }
@@ -55,4 +59,8 @@ public class Position {
         return this.blockedOpponentPiecesCount(piece)>=2;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(index);
+    }
 }

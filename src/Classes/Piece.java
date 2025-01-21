@@ -105,4 +105,15 @@ public class Piece {
     }
 
 
+    public Piece copy(Position position){
+        Piece piece = new Piece(this.color, this.owner);
+
+        piece.setPosition(position);
+        piece.inPlay = this.inPlay;
+        piece.isHome = this.isHome;
+        piece.isStart = this.isStart;
+
+        return piece;
+    }
+
 }

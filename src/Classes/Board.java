@@ -1,11 +1,13 @@
 package Classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import Helper.*;
 
 public class Board {
-    private final int  SIZE=60;
-    private List<Position> positions;
+    private final  int SIZE=60;
+    public List<Position> positions;
 
     public Board() {
         positions=new ArrayList<>();
@@ -17,7 +19,6 @@ public class Board {
             positions.add(new Position(i, isSafe));
         }
     }
-
     public boolean isSafePosition(int index) {
         Position position=getPositionAt(index);
         return position.isSafe();
@@ -27,6 +28,16 @@ public class Board {
             throw new IllegalArgumentException("Invalid position index: " + index);
         }
         return  positions.get(index);
+    }
+
+    public Piece getFirstPieceAt(Player player, int index){
+        Position position = getPositionAt(index);
+        for (Piece piece : position.getPieces()){
+            if (piece.getOwner().color == player.color){
+                return piece;
+            }
+        }
+        return null;
     }
 
     public boolean movePiece(Piece piece, int steps) {
@@ -114,4 +125,102 @@ public class Board {
 
     public void printBoard(List<Player> players) {
     }
+
+    public Board copy() {
+        Board clonedBoard = new Board();
+
+        // Clear the initialized positions in the cloned board
+        clonedBoard.positions.clear();
+
+        // Clone each position and add it to the cloned board
+        for (Position position : this.positions) {
+            Position newPos = position.copy();
+            for (Piece piece: position.getPieces()){
+                Piece newPiece = piece.copy(position);
+                position.addPiece(newPiece);
+            }
+            clonedBoard.positions.add(newPos);
+        }
+
+        return clonedBoard;
+    }
+
+
+    public void printBoard() {
+        // Initialize an empty board
+        String[] board = new String[225]; // 15x15 grid
+        Arrays.fill(board, "   "); // Initialize with empty spaces
+
+        // Mark safe positions
+        for (int safe : Constant.SAFE_POSITIONS) {
+            double[] coords = Constant.COORDINATES_MAP.get(safe);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = " S "; // Safe position
+        }
+
+        // Mark base positions for P1 and P2
+        for (int i = 0; i < Constant.BASE_POSITIONS.get("P1").length; i++) {
+            double[] coords = Constant.COORDINATES_MAP.get(Constant.BASE_POSITIONS.get("P1")[i]);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = "P1 "; // Base positions for P1
+        }
+        for (int i = 0; i < Constant.BASE_POSITIONS.get("P2").length; i++) {
+            double[] coords = Constant.COORDINATES_MAP.get(Constant.BASE_POSITIONS.get("P2")[i]);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = "P2 "; // Base positions for P2
+        }
+
+        // Mark home entrance positions for P1 and P2
+        for (int i = 0; i < Constant.HOME_ENTRANCE.get("P1").length; i++) {
+            double[] coords = Constant.COORDINATES_MAP.get(Constant.HOME_ENTRANCE.get("P1")[i]);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = "[ ]"; // Home entrance for P1
+        }
+        for (int i = 0; i < Constant.HOME_ENTRANCE.get("P2").length; i++) {
+            double[] coords = Constant.COORDINATES_MAP.get(Constant.HOME_ENTRANCE.get("P2")[i]);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = "[ ]"; // Home entrance for P2
+        }
+
+        // Mark turning points for P1 and P2
+        for (String player : Constant.TURNING_POINTS.keySet()) {
+            int turningPoint = Constant.TURNING_POINTS.get(player);
+            double[] coords = Constant.COORDINATES_MAP.get(turningPoint);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = " T "; // Turning point
+        }
+        // Mark home positions for P1 and P2
+        for (String player : Constant.HOME_POSITIONS.keySet()) {
+            int homePosition = Constant.HOME_POSITIONS.get(player);
+            double[] coords = Constant.COORDINATES_MAP.get(homePosition);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+            board[index] = " H "; // Home position
+        }
+
+        // Mark the walkable positions with '#', but avoid overwriting 'S' (safe positions)
+        for (int i = 0; i < Constant.PATH_POSITIONS.size(); i++) {
+            double[] coords = Constant.COORDINATES_MAP.get(Constant.PATH_POSITIONS.keySet().toArray()[i]);
+            int index = getIndex((int) coords[0], (int) coords[1]);
+
+            // Check if the position already has an 'S' (safe position)
+            if (!board[index].equals(" S ") && !board[index].equals(" T ")) {  // Only set '#' if the position is not a safe spot
+                board[index] = " # ";
+            }
+        }
+
+        // Print the board with spacing
+        for (int i = 0; i < 15; i++) {
+            for (int j = 0; j < 15; j++) {
+                System.out.print(board[i * 15 + j]);
+            }
+            System.out.println();
+        }
+    }
+
+    // Convert (x, y) coordinates to board index
+    private int getIndex(int x, int y) {
+        return (y * 15) + x;
+    }
+
 }
+

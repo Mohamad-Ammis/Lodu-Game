@@ -8,11 +8,18 @@ public class ComputerPlayer extends Player {
         super(name, color,startPosition,endPosition);
     }
     @Override
-    public boolean makeMove(int diceRoll, Board board) {
+    public boolean makeMove(int diceRoll, Game game) {
         return false;
     }
 
     public int decideBestMove(int diceRoll, Board board) {
         return 0;
+    }
+
+    @Override
+    public Player copy(){
+        ComputerPlayer player =  new ComputerPlayer(this.name, this.color, this.startPosition, this.endPosition);
+        player.consecutiveSixes = this.consecutiveSixes;
+        return player;
     }
 }

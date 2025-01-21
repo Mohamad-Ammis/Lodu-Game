@@ -26,10 +26,6 @@ public abstract class Player {
     consecutiveSixes=0;
     }
 
-    public List<Position> getPiecesPositions() {
-        return null;
-    }
-
     public void resetConsecutiveSixes() {
         this.consecutiveSixes=0;
     }
@@ -42,7 +38,7 @@ public abstract class Player {
         return this.consecutiveSixes<3;
     }
 
-    public abstract boolean makeMove(int diceRoll, Board board) ;
+    public abstract boolean makeMove(int diceRoll, Game game) ;
 
     public boolean allPiecesInHome(Board board) {
         return false;
@@ -79,4 +75,6 @@ public abstract class Player {
         return endPosition;
     }
 
+
+    public abstract Player copy();
 }
