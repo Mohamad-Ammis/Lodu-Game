@@ -1,5 +1,6 @@
 package Classes;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -8,7 +9,7 @@ public class Game {
     private List<Player> players;
     private Player winnerPlayer;
     private int currentPlayerIndex;
-    private int maxConsecutiveSixes=3;
+    private final int maxConsecutiveSixes=3;
     private Scanner input=new Scanner(System.in);
 
 
@@ -16,6 +17,10 @@ public class Game {
         this.board = board;
         this.players = players;
         currentPlayerIndex=0;
+    }
+
+    public void setCurrentPlayerIndex(int currentPlayerIndex) {
+        this.currentPlayerIndex = currentPlayerIndex;
     }
 
     public void startGame() {
@@ -42,7 +47,7 @@ public class Game {
 
     private void handleDiceRoll(Player currentPlayer) {
         int diceRoll = rollDice();
-        currentPlayer.makeMove(diceRoll, board);
+        currentPlayer.makeMove(diceRoll, this);
         handleConsecutiveSixes(currentPlayer,diceRoll);
         while (diceRoll == 6) {
             currentPlayer.incrementConsecutiveSixes();
@@ -51,7 +56,7 @@ public class Game {
                 System.out.println("Press any button to roll dice ");
                 input.nextLine();
                 diceRoll = rollDice();
-                currentPlayer.makeMove(diceRoll, board);
+                currentPlayer.makeMove(diceRoll, this);
                 handleConsecutiveSixes(currentPlayer,diceRoll);
             } else {
                 break;
@@ -89,6 +94,10 @@ public class Game {
             return  false;
     }
 
+    public double calcProbability(int diceRoll){
+        return (1.0 / 6.0);
+    }
+
     public void endGame() {
         System.out.println("Game Over!");
         System.out.println("Congratulations! Player " + winnerPlayer.getName() + " has won the game!");
@@ -98,4 +107,30 @@ public class Game {
     public void notifyPlayers() {
         System.out.println("Notifying all players about the game status...");
     }
+
+    public Game copy(){
+        List<Player> newPlayers = new ArrayList<>();
+        for (Player player: this.players){
+            newPlayers.add(player.copy());
+        }
+        return new Game(this.board.copy(), newPlayers);
+    }
+
+    public List<Game> getNextStates(int diceRoll, Player player){
+        List<Game> states = new ArrayList<>();
+
+        for (Position position: this.board.positions){
+            for (Piece piece : position.getPieces()){
+                if ((piece.getOwner().equals(player) && board.canPieceMove(piece, diceRoll))){
+                    Game newGame = this.copy();
+                    Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
+                    newGame.board.movePiece(newPiece, diceRoll);
+                    states.add(newGame);
+                }
+            }
+        }
+
+        return states;
+    }
+
 }

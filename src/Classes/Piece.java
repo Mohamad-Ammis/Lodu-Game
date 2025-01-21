@@ -21,7 +21,7 @@ public class Piece {
 
 
     public Position getPosition() {
-        return null;
+        return this.currentPosition;
     }
 
     public void move(int diceRoll, Board board) {
@@ -45,7 +45,7 @@ public class Piece {
     }
 
     public Color getColor() {
-        return null;
+        return color;
     }
 
     public boolean isStart() {
@@ -71,6 +71,14 @@ public class Piece {
         this.isHome=false;
         startPosition.addPiece(this);
         System.out.println("Piece has been reset to the start position.");
+    }
+
+    public Piece copy(Position position){
+        Piece piece = new Piece(this.color, this.owner);
+
+        piece.setPosition(position);
+
+        return piece;
     }
 
 }

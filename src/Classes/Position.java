@@ -11,7 +11,7 @@ public class Position {
     }
 
     public int getIndex() {
-        return 0;
+        return index;
     }
 
     public boolean isSafe() {
@@ -29,6 +29,10 @@ public class Position {
     }
 
     public List<Piece> getPieces() {
-        return null;
+        return this.pieces;
+    }
+
+    public Position copy(){
+        return new Position(this.index, this.isSafe);
     }
 }

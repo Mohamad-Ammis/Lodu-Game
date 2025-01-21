@@ -3,7 +3,7 @@ package Helper;
 import java.util.*;
 
 
-public class Constants {
+public class Constant {
     public static final int BOARD_SIZE = 53;  // Board has 52 positions
     public static final Map<Integer, double[]> COORDINATES_MAP = new HashMap<>();
     public static final double STEP_LENGTH = 7.0;

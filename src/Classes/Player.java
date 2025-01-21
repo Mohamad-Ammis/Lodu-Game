@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
-    private String name;
-    private Color color;
-    private List<Piece> pieces;
-    private int consecutiveSixes;
-    private Position startPosition;
-    private Position endPosition;
+    protected String name;
+    protected Color color;
+    protected int consecutiveSixes;
+    protected Position startPosition;
+    protected Position endPosition;
 
     public Player(String name, Color color, Position startPosition, Position endPosition) {
     this.name=name;
@@ -19,10 +18,6 @@ public abstract class Player {
     this.startPosition=startPosition;
     this.endPosition=endPosition;
     consecutiveSixes=0;
-    }
-
-    public List<Position> getPiecesPositions() {
-        return null;
     }
 
     public void resetConsecutiveSixes() {
@@ -37,7 +32,7 @@ public abstract class Player {
         return this.consecutiveSixes<3;
     }
 
-    public abstract void makeMove(int diceRoll, Board board) ;
+    public abstract void makeMove(int diceRoll, Game game) ;
 
     public boolean allPiecesInHome(Board board) {
         return false;
@@ -59,13 +54,6 @@ public abstract class Player {
         this.color = color;
     }
 
-    public List<Piece> getPieces() {
-        return pieces;
-    }
-
-    public void setPieces(List<Piece> pieces) {
-        this.pieces = pieces;
-    }
     public Position getStartPosition() {
         return startPosition;
     }
@@ -74,4 +62,6 @@ public abstract class Player {
         return endPosition;
     }
 
+
+    public abstract Player copy();
 }
