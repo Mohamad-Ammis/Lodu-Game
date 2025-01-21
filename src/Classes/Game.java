@@ -23,6 +23,18 @@ public class Game {
         this.currentPlayerIndex = currentPlayerIndex;
     }
 
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
     public void startGame() {
         System.out.println("Game is started");
         while (!isGameOver()) {
@@ -124,7 +136,7 @@ public class Game {
             System.out.println(position);
             for (Piece piece : position.getPieces()){
                 System.out.println(diceRoll);
-                if ((piece.getOwner().equals(player)) && piece.canMove(diceRoll, board)){
+                if ((piece.getOwner().equals(player)) && piece.canMove(diceRoll)){
                     Game newGame = this.copy();
                     Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
                     newGame.board.movePiece(newPiece, diceRoll);
@@ -136,4 +148,7 @@ public class Game {
         return states;
     }
 
+    public Board getBoard() {
+        return board;
+    }
 }

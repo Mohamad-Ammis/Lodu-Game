@@ -19,7 +19,14 @@ public class Piece {
     this.isHome=false;
     this.isStart=true;
     }
-
+    public Piece(Color color,Player owner,Position currentPosition) {
+       this.currentPosition=currentPosition;
+        this.color=color;
+        this.owner=owner;
+        this.inPlay=false;
+        this.isHome=false;
+        this.isStart=true;
+    }
     public Position getPosition() {
         return this.currentPosition;
     }
@@ -31,16 +38,34 @@ public class Piece {
         return this.isHome;
     }
 
-    boolean canMove(int steps, Board board) {
+    boolean canMove(int steps) {
         if (this.isStart() && steps != 6) {
-            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
+//            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
             return false;
         }
         if (this.isHome()) {
-            System.out.println("Piece cannot be moved from the home.");
+//            System.out.println("Piece cannot be moved from the home.");
             return false;
         }
+        int targetIndex=this.currentPosition.getIndex()+steps;
+        if(targetIndex>this.owner.endPosition.getIndex()){
+            return  false;
+        }
+
         return true;
+    }
+    boolean isInHomePath(){
+        int currentIndex=this.currentPosition.getIndex();
+        int playerEndIndex=this.getOwner().getEndPosition().getIndex();
+        int homeStartIndex=playerEndIndex-6;
+        return currentIndex >= homeStartIndex && currentIndex <= playerEndIndex;
+    }
+    boolean isMoveExceedsEndPosition(int targetIndex) {
+        if (targetIndex > this.owner.getEndPosition().getIndex()) {
+            System.out.println("Target position exceeds player's end position. Move is not possible.");
+            return true;
+        }
+        return false;
     }
 
     public void setInPlay(boolean inPlay) {
@@ -115,5 +140,6 @@ public class Piece {
 
         return piece;
     }
+
 
 }
