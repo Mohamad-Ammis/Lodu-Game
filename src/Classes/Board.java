@@ -17,6 +17,7 @@ public class Board {
             positions.add(new Position(i, isSafe));
         }
     }
+
     public boolean isSafePosition(int index) {
         Position position=getPositionAt(index);
         return position.isSafe();
@@ -83,32 +84,15 @@ public class Board {
 
     private void handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
         //handle opponentPiece existed state
-        if (isBlockedBySinglePiece(targetPosition,piece)) {
+        if (targetPosition.isBlockedBySinglePiece(piece)) {
             piece.handleOpponentPiece(targetPosition);
             return;
-        }if (isBlockedByMultiplePieces(targetPosition,piece)) {
+        }if (targetPosition.isBlockedByMultiplePieces(piece)) {
             System.out.println("Target position is blocked by multiple pieces. Move is not possible.");
             return;
         }
         //normal state
         piece.updatePosition(currentPosition, targetPosition);
-    }
-    private int blockedOpponentPiecesCount(Position targetPosition, Piece piece) {
-        int count=0;
-        if (!targetPosition.isSafe() && !targetPosition.getPieces().isEmpty()) {
-            for (Piece opponentPiece : targetPosition.getPieces()) {
-                if (piece.isOpponentPiece(opponentPiece)) {
-                    count++;
-                }
-            }
-        }
-        return count;
-    }
-    public boolean isBlockedBySinglePiece(Position targetPosition, Piece piece){
-        return blockedOpponentPiecesCount(targetPosition, piece)==1;
-    }
-    public boolean isBlockedByMultiplePieces(Position targetPosition, Piece piece){
-        return blockedOpponentPiecesCount(targetPosition, piece)>=2;
     }
 
     private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {

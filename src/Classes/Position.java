@@ -19,6 +19,7 @@ public class Position {
     }
 
     public void addPiece(Piece piece) {
+        this.pieces.add(piece);
     }
 
     public void removePiece(Piece piece) {
@@ -31,4 +32,22 @@ public class Position {
     public List<Piece> getPieces() {
         return null;
     }
+    private int  blockedOpponentPiecesCount(Piece piece) {
+        int count=0;
+        if (!this.isSafe() && !this.getPieces().isEmpty()) {
+            for (Piece opponentPiece : this.getPieces()) {
+                if (piece.isOpponentPiece(opponentPiece)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+     public boolean isBlockedBySinglePiece(Piece piece){
+        return this.blockedOpponentPiecesCount(piece)==1;
+    }
+     public boolean isBlockedByMultiplePieces(Piece piece){
+        return this.blockedOpponentPiecesCount(piece)>=2;
+    }
+
 }
