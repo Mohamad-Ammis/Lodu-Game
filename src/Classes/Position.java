@@ -1,5 +1,6 @@
 package Classes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Position {
@@ -8,14 +9,17 @@ public class Position {
     private List<Piece> pieces;
 
     public Position(int index, boolean isSafe) {
+        this.index=index;
+        this.isSafe=isSafe;
+        this.pieces=new ArrayList<>();
     }
 
     public int getIndex() {
-        return 0;
+        return this.index;
     }
 
     public boolean isSafe() {
-        return false;
+        return this.isSafe;
     }
 
     public void addPiece(Piece piece) {
@@ -23,14 +27,15 @@ public class Position {
     }
 
     public void removePiece(Piece piece) {
+    this.pieces.remove(piece);
     }
 
-    public boolean isOccupied() {
-        return false;
+    public boolean isEmpty() {
+        return this.pieces.isEmpty();
     }
 
     public List<Piece> getPieces() {
-        return null;
+        return this.pieces;
     }
     private int  blockedOpponentPiecesCount(Piece piece) {
         int count=0;
