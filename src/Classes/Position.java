@@ -59,4 +59,8 @@ public class Position {
         return this.blockedOpponentPiecesCount(piece)>=2;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(index);
+    }
 }

@@ -120,10 +120,11 @@ public class Game {
 
     public List<Game> getNextStates(int diceRoll, Player player){
         List<Game> states = new ArrayList<>();
-
         for (Position position: this.board.positions){
+            System.out.println(position);
             for (Piece piece : position.getPieces()){
-                if ((piece.getOwner().equals(player) && board.canPieceMove(piece, diceRoll))){
+                System.out.println(diceRoll);
+                if ((piece.getOwner().equals(player)) && piece.canMove(diceRoll, board)){
                     Game newGame = this.copy();
                     Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
                     newGame.board.movePiece(newPiece, diceRoll);
