@@ -10,7 +10,24 @@ public class AILogic {
     }
 
     public double evaluateState(Game game, Player player) {
-        return 0;
+        double score=0.0;
+
+        for(Piece piece:player.getPieces()){
+            Position position=piece.getPosition();
+            if(piece.isHome()){
+                score+=1.0;
+            } else if (game.getBoard().isSafePosition(position.getIndex())) {
+                score+=0.75;
+            } else {
+                int homeIndex=player.getEndPosition().getIndex();
+                int currentIndex= position.getIndex();
+                int distanceToHome=homeIndex-currentIndex;
+                if(distanceToHome>0){
+                    score+=1.0/distanceToHome;
+                }
+            }
+        }
+        return score*100;
     }
 
     private Double expectiMax(
@@ -49,7 +66,7 @@ public class AILogic {
         double expectedValue = 0;
         for (int i = 1; i <= 6; i++){
             double value = 0;
-            if (player.color == Color.RED){
+            if (player.getColor() == Color.RED){
                 value = maxMove(game, game.players.get(1), i, depth);
             }
             else{

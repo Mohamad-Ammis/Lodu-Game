@@ -135,5 +135,8 @@ public class Game {
 
         return states;
     }
+    public Board getBoard(){
+        return this.board;
+    }
 
 }
