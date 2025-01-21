@@ -13,7 +13,7 @@ public class HumanPlayer extends Player {
         Piece selectedPiece=Helper.choosePieceToMove(game.getPlayers().get(game.getCurrentPlayerIndex()),diceRoll);
         if(selectedPiece!=null){
 
-        game.getBoard().movePiece(selectedPiece,diceRoll);
+       return game.getBoard().movePiece(selectedPiece,diceRoll);
         }
         return false;
     }

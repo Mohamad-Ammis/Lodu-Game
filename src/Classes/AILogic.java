@@ -67,10 +67,10 @@ public class AILogic {
         for (int i = 1; i <= 6; i++){
             double value = 0;
             if (player.getColor() == Color.RED){
-                value = maxMove(game, game.players.get(1), i, depth);
+                value = maxMove(game, game.getPlayers().get(1), i, depth);
             }
             else{
-                value = minMove(game, game.players.get(0), i, depth);
+                value = minMove(game, game.getPlayers().get(0), i, depth);
             }
             expectedValue += game.calcProbability(i) * value;
         }

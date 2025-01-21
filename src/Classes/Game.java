@@ -151,7 +151,4 @@ public class Game {
         return this.board;
     }
 
-    public Board getBoard() {
-        return board;
-    }
 }
