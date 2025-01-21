@@ -39,8 +39,13 @@ public abstract class Player {
 
     public abstract boolean makeMove(int diceRoll, Game game) ;
 
-    public boolean allPiecesInHome(Board board) {
-        return false;
+    public boolean allPiecesInHome() {
+        for (Piece piece:this.pieces){
+            if(!piece.isHome()){
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getName() {
@@ -63,8 +68,8 @@ public abstract class Player {
     return pieces;
     }
 
-    public void setPieces(List<Piece> pieces) {
-
+    public void setPieces(Piece[] pieces) {
+    this.pieces=pieces;
     }
     public Position getStartPosition() {
         return startPosition;

@@ -99,7 +99,7 @@ public class Game {
     }
     public boolean isGameOver() {
         for (Player player :players){
-            if(player.allPiecesInHome(board)){
+            if(player.allPiecesInHome()){
                 winnerPlayer=player;
                 endGame();
                 return true;
