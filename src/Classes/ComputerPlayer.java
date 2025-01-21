@@ -18,7 +18,7 @@ public class ComputerPlayer extends Player {
 
     @Override
     public Player copy(){
-        ComputerPlayer player =  new ComputerPlayer(this.name, this.color, this.startPosition, this.endPosition);
+        ComputerPlayer player =  new ComputerPlayer(this.getName(), this.getColor(), this.getStartPosition(), this.getEndPosition());
         player.consecutiveSixes = this.consecutiveSixes;
         return player;
     }

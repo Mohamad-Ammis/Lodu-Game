@@ -30,7 +30,7 @@ public class AILogic {
         return score*100;
     }
 
-    private Double expectiMax(
+    private Double expectaMax(
             Game game,
             int depth,
             Player maximizePlayer,
@@ -66,7 +66,7 @@ public class AILogic {
         double expectedValue = 0;
         for (int i = 1; i <= 6; i++){
             double value = 0;
-            if (player.getColor() == Color.RED){
+            if (player.getColor() == Color.R){
                 value = maxMove(game, game.players.get(1), i, depth);
             }
             else{

@@ -9,7 +9,7 @@ public abstract class Player {
     private String name;
     private Color color;
     private Piece[] pieces;
-    private int consecutiveSixes;
+    int consecutiveSixes;
     private Position startPosition;
     private Position endPosition;
 

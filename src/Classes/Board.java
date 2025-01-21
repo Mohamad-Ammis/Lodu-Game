@@ -6,7 +6,7 @@ import java.util.List;
 import Helper.*;
 
 public class Board {
-    private final  int SIZE=60;
+    private final  int SIZE=52;
     public List<Position> positions;
 
     public Board() {
@@ -124,6 +124,8 @@ public class Board {
     }
 
     public void printBoard(List<Player> players) {
+        PrintBoard.print_board(positions);
+        System.out.println();
     }
 
     public Board copy() {

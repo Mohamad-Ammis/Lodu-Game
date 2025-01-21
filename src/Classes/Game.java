@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Game {
     private Board board;
-    private List<Player> players;
+    List<Player> players;
     private Player winnerPlayer;
     private int currentPlayerIndex;
     private final int maxConsecutiveSixes=3;
@@ -25,6 +25,8 @@ public class Game {
 
     public void startGame() {
         System.out.println("Game is started");
+        PrintBoard.print_board(board.positions);
+        System.out.println();
         while (!isGameOver()) {
             playTurn();
             board.printBoard(players);
@@ -49,7 +51,7 @@ public class Game {
         //variable to check extra turn when player eat opponent piece
         boolean extraTurn=false;
         int diceRoll = rollDice();
-       extraTurn= currentPlayer.makeMove(diceRoll, this);
+        extraTurn= currentPlayer.makeMove(diceRoll, this);
         handleConsecutiveSixes(currentPlayer,diceRoll);
         while (diceRoll ==6||extraTurn) {
             currentPlayer.incrementConsecutiveSixes();
@@ -58,7 +60,7 @@ public class Game {
                 System.out.println("Press any button to roll dice ");
                 input.nextLine();
                 diceRoll = rollDice();
-               extraTurn= currentPlayer.makeMove(diceRoll, this);
+                extraTurn= currentPlayer.makeMove(diceRoll, this);
                 handleConsecutiveSixes(currentPlayer,diceRoll);
             } else {
                 break;
@@ -93,7 +95,7 @@ public class Game {
                 return true;
             }
         }
-            return  false;
+        return  false;
     }
 
     public double calcProbability(int diceRoll){
@@ -135,8 +137,8 @@ public class Game {
 
         return states;
     }
-    public Board getBoard(){
-        return this.board;
-    }
 
+    public Board getBoard() {
+        return this.getBoard();
+    }
 }

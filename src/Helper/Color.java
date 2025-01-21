@@ -1,8 +1,8 @@
 package Helper;
 
 public enum Color {
-    RED,
-    BLUE,
-    GREEN,
-    YELLOW
+    R,
+    B,
+    G,
+    Y
 }

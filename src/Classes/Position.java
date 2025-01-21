@@ -1,5 +1,7 @@
 package Classes;
 
+import Helper.Color;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
     }
     @Override
     public Player copy(){
-        HumanPlayer player = new HumanPlayer(this.name, this.color, this.startPosition, this.endPosition);
+        HumanPlayer player = new HumanPlayer(this.getName(), this.getColor(), this.getStartPosition(), this.getEndPosition());
         player.consecutiveSixes = this.consecutiveSixes;
         return player;
     }
