@@ -6,7 +6,7 @@ import java.util.List;
 import Helper.*;
 
 public class Board {
-    private final  int SIZE=60;
+    static final  int SIZE=51;
     public List<Position> positions;
 
     public Board() {
@@ -46,23 +46,27 @@ public class Board {
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (!piece.canMove( steps)) return false;
+        if (!piece.canMove( steps)) {
+            return false;}
 
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
         //we need this three index variable to check if piece is in player home path
         int currentIndex = currentPosition.getIndex();
         int playerEndIndex = owner.getEndPosition().getIndex();
-        int homeStartIndex = playerEndIndex - 5; // Start of home path (last 5 positions)
+        int homeStartIndex = playerEndIndex - 6; // Start of home path (last 5 positions)
         //target index where we will put the piece
-        int targetIndex = currentIndex + steps;
+        int targetIndex = (currentIndex + steps);
+        if(piece.getOwner().startPosition.getIndex()>playerEndIndex){
+            targetIndex%=Board.SIZE;
+        }
         if (piece.isInHomePath()) {
             handleHomeMovement(piece, steps, currentIndex, playerEndIndex);
             return false;
         }
-        if (piece.isMoveExceedsEndPosition (targetIndex)) {
-            return false;
-        }
+//        if (piece.isMoveExceedsEndPosition (targetIndex)) {
+//            return false;
+//        }
         //when piece it's not on home path so we handle normal move state
         Position targetPosition = getPositionAt(targetIndex);
         boolean extraTurn= handleTargetPosition(piece, currentPosition, targetPosition);
@@ -83,7 +87,10 @@ public class Board {
     private void movePieceToHome(Piece piece) {
         System.out.println("Piece has reached home!");
         piece.setInHome(true);
+        piece.setStart(false);
+        piece.setInPlay(false);
         piece.getPosition().removePiece(piece);
+        piece.setPosition(piece.getOwner().endPosition);
     }
 
     private void movePieceWithinHomePath(Piece piece, int currentIndex, int steps) {
