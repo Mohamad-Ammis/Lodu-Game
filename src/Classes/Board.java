@@ -6,7 +6,7 @@ import java.util.List;
 import Helper.*;
 
 public class Board {
-    static final  int SIZE=51;
+    static final  int SIZE=60;
     public List<Position> positions;
 
     public Board() {
@@ -41,6 +41,7 @@ public class Board {
     }
 
     public boolean movePiece(Piece piece, int steps) {
+        adjustPiecePositionForRestrictedZone(piece);
         Position currentPosition = piece.getPosition();
 
         if (currentPosition == null) {
@@ -70,7 +71,39 @@ public class Board {
         //when piece it's not on home path so we handle normal move state
         Position targetPosition = getPositionAt(targetIndex);
         boolean extraTurn= handleTargetPosition(piece, currentPosition, targetPosition);
+        adjustPiecePositionForRestrictedZone(piece);
         return extraTurn;
+    }
+
+    private void adjustPiecePositionForRestrictedZone(Piece piece) {
+        if(piece.getOwner().color==Color.RED){
+            if(piece.getPosition().getIndex()>23&& piece.getPosition().getIndex()<=29){
+                System.out.println("red");
+                int invalidSteps=29- piece.getPosition().getIndex();
+                System.out.println(piece.getPosition().getIndex());
+                System.out.println(invalidSteps);
+                System.out.println((piece.getPosition().getIndex()-23));
+                Position tempTargetPosition=getPositionAt((piece.getPosition().getIndex()+invalidSteps+(piece.getPosition().getIndex()-23))%Board.SIZE);
+                Position tempCurrentPosition= piece.getPosition();
+                tempCurrentPosition.removePiece(piece);
+                tempTargetPosition.addPiece(piece);
+                piece.setPosition(tempTargetPosition);
+            }
+        }
+        if(piece.getOwner().color==Color.BLUE){
+            if(piece.getPosition().getIndex()>54&& piece.getPosition().getIndex()<=60){
+                System.out.println("blue");
+                int invalidSteps=60- piece.getPosition().getIndex();
+                System.out.println(piece.getPosition().getIndex());
+                System.out.println(invalidSteps);
+                System.out.println((piece.getPosition().getIndex()-54));
+                Position tempTargetPosition=getPositionAt((piece.getPosition().getIndex()+invalidSteps+(piece.getPosition().getIndex()-54))%Board.SIZE);
+                Position tempCurrentPosition= piece.getPosition();
+                tempCurrentPosition.removePiece(piece);
+                tempTargetPosition.addPiece(piece);
+                piece.setPosition(tempTargetPosition);
+            }
+        }
     }
 
 

@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Game {
     private Board board;
-    private List<Player> players;
+    static List<Player> players;
     private Player winnerPlayer;
     private int currentPlayerIndex;
     private final int maxConsecutiveSixes=3;
@@ -129,20 +129,26 @@ public class Game {
         }
         return new Game(this.board.copy(), newPlayers);
     }
-
     public List<Game> getNextStates(int diceRoll, Player player){
         List<Game> states = new ArrayList<>();
         for (Piece piece : player.getPieces()){
             System.out.println(diceRoll);
-            if (piece.canMove(diceRoll)){
+            if (piece != null && piece.canMove(diceRoll)) {  // إضافة تحقق من null
                 Game newGame = this.copy();
                 Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
-                newGame.board.movePiece(newPiece, diceRoll);
-                states.add(newGame);
+                if (newPiece != null) {  // تحقق من أن newPiece ليس null
+                    newGame.board.movePiece(newPiece, diceRoll);
+                    states.add(newGame);
+                } else {
+                    System.out.println("Error: No piece found at the specified position.");
+                }
+            } else {
+                System.out.println("Error: Piece is null or cannot move.");
             }
         }
         return states;
     }
+
     public Board getBoard(){
         return this.board;
     }
