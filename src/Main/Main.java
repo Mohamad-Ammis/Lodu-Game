@@ -14,7 +14,7 @@ public class Main {
 //        Player player4=new HumanPlayer("adnan", Color.GREEN,new Position(45,false),new Position(60,false));
         List<Player> playerList=new ArrayList<>();
         playerList.add(player1);
-//        playerList.add(player2);
+        playerList.add(player2);
 //        playerList.add(player3);
 //        playerList.add(player4);
         PrintBoard.initialize_cells();

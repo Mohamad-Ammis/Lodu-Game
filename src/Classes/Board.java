@@ -46,7 +46,7 @@ public class Board {
         if (currentPosition == null) {
             throw new IllegalStateException("Piece is not on the board.");
         }
-        if (!piece.canMove( steps,this)) return false;
+        if (!piece.canMove(steps)) return false;
 
         //we need owner player to get his own home path
         Player owner = piece.getOwner();
@@ -56,11 +56,11 @@ public class Board {
         int homeStartIndex = playerEndIndex - 5; // Start of home path (last 5 positions)
         //target index where we will put the piece
         int targetIndex = currentIndex + steps;
-        if (isInHomePath(currentIndex, homeStartIndex, playerEndIndex)) {
+        if (piece.isInHomePath()) {
             handleHomeMovement(piece, steps, currentIndex, playerEndIndex);
             return false;
         }
-        if (isMoveExceedsEndPosition (targetIndex, playerEndIndex)) {
+        if (piece.isMoveExceedsEndPosition (targetIndex)) {
             return false;
         }
         //when piece it's not on home path so we handle normal move state
@@ -95,6 +95,9 @@ public class Board {
 
 
     private boolean handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
+        piece.setInPlay(true);
+        piece.setStart(false);
+        piece.setInHome(false);
         //handle opponentPiece existed state
         if (targetPosition.isBlockedBySinglePiece(piece)) {
            return piece.handleOpponentPiece(targetPosition);
@@ -108,23 +111,15 @@ public class Board {
         return false;
     }
 
-    private boolean isInHomePath(int currentIndex, int homeStartIndex, int playerEndIndex) {
-        return currentIndex >= homeStartIndex && currentIndex <= playerEndIndex;
-    }
 
-    private boolean isMoveExceedsEndPosition (int targetIndex, int playerEndIndex) {
-        if (targetIndex > playerEndIndex) {
-            System.out.println("Target position exceeds player's end position. Move is not possible.");
-            return true;
-        }
-        return false;
-    }
+
+
     public List<Piece> getPiecesAtPosition(int index) {
         return positions.get(index).getPieces();
     }
 
     public void printBoard(List<Player> players) {
-        PrintBoard.print_board(positions);
+        PrintBoard.print_board(positions,players.get(0),players.get(1));
         System.out.println();
     }
 
@@ -139,7 +134,7 @@ public class Board {
             Position newPos = position.copy();
             for (Piece piece: position.getPieces()){
                 Piece newPiece = piece.copy(position);
-                position.addPiece(newPiece);
+                newPos.addPiece(newPiece);
             }
             clonedBoard.positions.add(newPos);
         }

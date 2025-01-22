@@ -42,7 +42,9 @@ public class PrintBoard {
         return x ;
     }
 
-    public static void  print_board(List<Position> positions) {
+    public static void  print_board(List<Position> positions,Player p1,Player p2) {
+
+
         int i = 0 ;
         int p = 23 ;
         for (int j=6 ; j <= 8 ; j++){
@@ -109,6 +111,30 @@ public class PrintBoard {
             cells[i][j] = set_cell(positions.get(p));
             p++;
         }
+//        for (Piece piece : p1.getPieces()) {
+//            if (piece.isStart()) {
+//                int baseIndex = p1.getBaseIndex(piece);
+//                cells[baseIndex / 15][baseIndex % 15] = "[" + piece.getColor() + "]";
+//            } else {
+//                int boardIndex = piece.getPosition().getIndex();
+//                cells[boardIndex / 15][boardIndex % 15] = "[" + piece.getColor() + "]";
+//            }
+//        }
+//        for (Piece piece : p2.getPieces()) {
+//            if (piece.isStart()) {
+//                int baseIndex = p2.getBaseIndex(piece); // Get index in the player's base
+//                cells[baseIndex / 15][baseIndex % 15] = "[" + piece.getColor() + "]";
+//            } else {
+//                int boardIndex = piece.getPosition().getIndex();
+//                cells[boardIndex / 15][boardIndex % 15] = "[" + piece.getColor() + "]";
+//            }
+//        }
+//        for (int k = 0; k < positions.size(); k++) {
+//            Position position = positions.get(k);
+//            if (!position.getPieces().isEmpty()) {
+//                cells[k / 15][k % 15] = set_cell(position);
+//            }
+//        }
         print();
     }
 

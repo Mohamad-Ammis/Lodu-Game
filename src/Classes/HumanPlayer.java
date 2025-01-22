@@ -10,6 +10,11 @@ public class HumanPlayer extends Player {
 
     @Override
     public boolean makeMove(int diceRoll, Game game) {
+        Piece selectedPiece=Helper.choosePieceToMove(game.getPlayers().get(game.getCurrentPlayerIndex()),diceRoll);
+        if(selectedPiece!=null){
+
+       return game.getBoard().movePiece(selectedPiece,diceRoll);
+        }
         return false;
     }
     @Override
