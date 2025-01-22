@@ -95,6 +95,11 @@ public class Board {
 
 
     private boolean handleTargetPosition(Piece piece, Position currentPosition, Position targetPosition) {
+       if(piece.isStart()&&(targetPosition.getIndex()==6)){
+           piece.setInPlay(true);
+           piece.setStart(false);
+           return false;
+       }
         piece.setInPlay(true);
         piece.setStart(false);
         piece.setInHome(false);

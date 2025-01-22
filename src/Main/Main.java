@@ -18,9 +18,9 @@ public class Main {
 //        playerList.add(player3);
 //        playerList.add(player4);
 
-//        Game game=new Game(new Board(),playerList
-//        );
-//        game.startGame();
+        Game game=new Game(new Board(),playerList
+        );
+        game.startGame();
 //        Piece []pieces=player1.getPieces();
 //        for (Piece piece:pieces)
 //        {
