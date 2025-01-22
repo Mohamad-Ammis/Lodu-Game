@@ -5,8 +5,33 @@ import java.util.*;
 
 public class AILogic {
 
-    public int calculateBestMove(Game game, int depth, Player player) {
-        return 0;
+    public int calculateBestMove(Game game, int depth, Player player, int diceRoll) {
+        if (game.isGameOver()) {
+            return -1;
+        }
+
+        int bestMove = -1;
+        double bestValue = Double.NEGATIVE_INFINITY;
+
+        List<Game> possibleStates = game.getNextStates(diceRoll, player);
+
+        if (possibleStates.isEmpty()) {
+            return -1;
+        }
+
+        for (int moveIndex = 0; moveIndex < possibleStates.size(); moveIndex++) {
+            Game nextState = possibleStates.get(moveIndex);
+            double moveValue;
+
+            moveValue = maxMove(nextState, player, diceRoll, depth - 1);
+
+            if (moveValue > bestValue) {
+                bestValue = moveValue;
+                bestMove = moveIndex;
+            }
+        }
+
+        return bestMove;
     }
 
     public double evaluateState(Game game, Player player) {
@@ -30,7 +55,7 @@ public class AILogic {
         return score*100;
     }
 
-    private Double expectiMax(
+    private double expectiMax(
             Game game,
             int depth,
             Player maximizePlayer,
@@ -43,7 +68,11 @@ public class AILogic {
         double maxValue = Double.MIN_VALUE;
         List<Game> games = game.getNextStates(diceRoll, player);
         for (Game state : games){
-            double value = chanceMove(state, player, diceRoll, depth - 1);
+            double value = 0;
+            if (diceRoll != 6)
+                value = chanceMove(state, game.getPlayers().getFirst(), diceRoll, depth - 1);
+            else
+                value = chanceMove(state, player, diceRoll, depth - 1);
             maxValue = Math.max(value, maxValue);
         }
         return maxValue;
@@ -53,7 +82,11 @@ public class AILogic {
         double minValue = Double.MAX_VALUE;
         List<Game> games = game.getNextStates(diceRoll, player);
         for (Game state : games){
-            double value = chanceMove(state, player, diceRoll, depth - 1);
+            double value;
+            if(diceRoll != 6)
+                value = chanceMove(state, game.getPlayers().get(1), diceRoll, depth - 1);
+            else
+                value = chanceMove(state, player, diceRoll, depth - 1);
             minValue = Math.min(value, minValue);
         }
         return minValue;
