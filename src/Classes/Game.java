@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Game {
     private Board board;
-    List<Player> players;
+    static List<Player> players;
     private Player winnerPlayer;
     private int currentPlayerIndex;
     private final int maxConsecutiveSixes=3;
@@ -101,7 +101,7 @@ public class Game {
     }
     public boolean isGameOver() {
         for (Player player :players){
-            if(player.allPiecesInHome(board)){
+            if(player.allPiecesInHome()){
                 winnerPlayer=player;
                 endGame();
                 return true;
@@ -134,23 +134,26 @@ public class Game {
 
     public List<Game> getNextStates(int diceRoll, Player player){
         List<Game> states = new ArrayList<>();
-        for (Position position: this.board.positions){
-            System.out.println(position);
-            for (Piece piece : position.getPieces()){
-                System.out.println(diceRoll);
-                if ((piece.getOwner().equals(player)) && piece.canMove(diceRoll)){
-                    Game newGame = this.copy();
-                    Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
+        for (Piece piece : player.getPieces()){
+            System.out.println(diceRoll);
+            if (piece != null && piece.canMove(diceRoll)) {  // إضافة تحقق من null
+                Game newGame = this.copy();
+                Piece newPiece = newGame.board.getFirstPieceAt(player, piece.getPosition().getIndex());
+                if (newPiece != null) {  // تحقق من أن newPiece ليس null
                     newGame.board.movePiece(newPiece, diceRoll);
                     states.add(newGame);
+                } else {
+                    System.out.println("Error: No piece found at the specified position.");
                 }
+            } else {
+                System.out.println("Error: Piece is null or cannot move.");
             }
         }
-
         return states;
     }
 
-    public Board getBoard() {
-      return this.board;
+    public Board getBoard(){
+        return this.board;
     }
+
 }

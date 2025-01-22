@@ -32,10 +32,6 @@ public class Position {
     this.pieces.remove(piece);
     }
 
-    public boolean isOccupied() {
-        return false;
-    }
-
     public List<Piece> getPieces() {
         return this.pieces;
     }

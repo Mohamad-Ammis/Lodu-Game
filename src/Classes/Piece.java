@@ -37,23 +37,35 @@ public class Piece {
     public boolean isAtHome(Board board) {
         return this.isHome;
     }
-
     boolean canMove(int steps) {
         if (this.isStart() && steps != 6) {
 //            System.out.println("Piece cannot be moved from the start position unless you roll a 6.");
             return false;
         }
         if (this.isHome()) {
-//            System.out.println("Piece cannot be moved from the home.");
+//            System.out.println("Piece cannot be moved as it is already at home.");
             return false;
         }
-        int targetIndex=this.currentPosition.getIndex()+steps;
-        if(targetIndex>this.owner.endPosition.getIndex()){
-            return  false;
+        int targetIndex = (this.currentPosition.getIndex() + steps) ;
+        if(this.owner.startPosition.getIndex()>this.owner.endPosition.getIndex()){
+            targetIndex%=Board.SIZE;
         }
-
+        int homeStartIndex = this.owner.getEndPosition().getIndex() - 6;
+        int distanceToHome=this.owner.getEndPosition().getIndex()-this.currentPosition.getIndex();
+        if (this.isInHomePath() && (this.isTargetIndexPassEndPosition(targetIndex) || this.isTargetPassDistanceToHome(targetIndex, distanceToHome))) {
+            return false;
+        }
         return true;
     }
+
+    private boolean isTargetPassDistanceToHome(int targetIndex, int distanceToHome) {
+        return (this.owner.getEndPosition().getIndex() - targetIndex) > distanceToHome;
+    }
+
+    private boolean isTargetIndexPassEndPosition(int targetIndex) {
+        return targetIndex > this.owner.getEndPosition().getIndex();
+    }
+
     boolean isInHomePath(){
         int currentIndex=this.currentPosition.getIndex();
         int playerEndIndex=this.getOwner().getEndPosition().getIndex();
@@ -61,9 +73,18 @@ public class Piece {
         return currentIndex >= homeStartIndex && currentIndex <= playerEndIndex;
     }
     boolean isMoveExceedsEndPosition(int targetIndex) {
+        //normal state
+        if(this.owner.startPosition.getIndex()<this.owner.endPosition.getIndex()){
         if (targetIndex > this.owner.getEndPosition().getIndex()) {
-            System.out.println("Target position exceeds player's end position. Move is not possible.");
+//            System.out.println("Target position exceeds player's end position. Move is not possible.");
             return true;
+        }
+        }
+        else if(this.owner.startPosition.getIndex()>this.owner.endPosition.getIndex()){
+            if((targetIndex>this.owner.startPosition.getIndex())&&(targetIndex>Board.SIZE)){
+                return true;
+            }
+
         }
         return false;
     }
